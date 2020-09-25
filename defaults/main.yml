@@ -1,11 +1,30 @@
 ---
 # File: main.yml - Main default variables for nomad
 
+# assert supported os/versions
+os_supported_matrix:
+  Archlinux:
+    min_version: ''
+  # RHEL-based
+  RedHat:
+    min_version: '6'
+  CentOS:
+    min_version: '6'
+  Fedora:
+    min_version: ''
+  Amazon:
+    min_version: ''
+  # Debian based
+  Debian:
+    min_version: '8.2'
+  Ubuntu:
+    min_version: '13.04'
+
 ## Core
 nomad_debug: false
 
 ### Package
-nomad_version: "{{ lookup('env','NOMAD_VERSION') | default('0.11.3', true) }}"
+nomad_version: "{{ lookup('env','NOMAD_VERSION') | default('0.12.5', true) }}"
 nomad_architecture_map:
   amd64: amd64
   x86_64: amd64
@@ -56,7 +75,9 @@ nomad_num_schedulers: "{{ ansible_processor_vcpus }}"
 nomad_node_gc_threshold: "24h"
 nomad_job_gc_threshold: "4h"
 nomad_eval_gc_threshold: "1h"
+nomad_deployment_gc_threshold: "1h"
 nomad_encrypt: ""
+nomad_raft_protocol: 2
 
 #### Client settings
 nomad_node_class: ""
@@ -133,14 +154,23 @@ nomad_vault_key_file: ""
 nomad_vault_tls_server_name: ""
 nomad_vault_tls_skip_verify: false
 nomad_vault_token: ""
+nomad_vault_namespace: ""
 
 ### Docker
 nomad_docker_enable: "{{ lookup('env','NOMAD_DOCKER_ENABLE') | default('false', true) }}"
 nomad_docker_dmsetup: true
 
 ### Tls
+nomad_tls_enable: false
 nomad_ca_file: ""
 nomad_cert_file: ""
 nomad_key_file: ""
+nomad_rpc_upgrade_mode: false
 nomad_verify_server_hostname: true
 nomad_verify_https_client: true
+
+### Autopilot
+nomad_autopilot_cleanup_dead_servers: true
+nomad_autopilot_last_contact_threshold: "200ms"
+nomad_autopilot_max_trailing_logs: 250
+nomad_autopilot_server_stabilization_time: "10s"
