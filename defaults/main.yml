@@ -62,6 +62,14 @@ nomad_leave_on_terminate: true
 nomad_leave_on_interrupt: false
 nomad_disable_update_check: false
 
+## Vault Settings
+nomad_vault_agent_support: false
+nomad_vault_agent_skip_verify: false
+nomad_vault_agent_service_address: "http://vault.service.consul:8200"
+nomad_vault_agent_token_path: /mnt/ramdisk/token
+nomad_vault_agent_bin: /usr/local/bin/vault
+nomad_vault_config_hcl: /etc/vault-agent.hcl
+
 #### Server settings
 nomad_retry_max: 0
 nomad_retry_join: false

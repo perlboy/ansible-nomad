@@ -17,7 +17,14 @@ Wants=network-online.target
 [Service]
 User={{ nomad_user }}
 Group={{ nomad_group }}
+{% if nomad_vault_agent_support == True %}
+Environment=VAULT_ADDR={{ nomad_vault_agent_service_address }}
+Environment=VAULT_SKIP_VERIFY={{ nomad_vault_agent_skip_verify }}
+ExecStartPre={{ nomad_vault_agent_bin }} agent -config /etc/vault-agent.d/vault-agent.hcl
+ExecStart=/usr/bin/nomad-vault.sh
+{% else %}
 ExecStart={{ nomad_bin_dir }}/nomad agent -config={{ nomad_config_dir }}
+{% endif %}
 
 ExecReload=/bin/kill -HUP $MAINPID
 KillMode=process

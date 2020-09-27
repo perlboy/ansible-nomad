@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+if [ -f {{ nomad_vault_agent_token_path }} ]; then
+  exec env VAULT_TOKEN=$({{ nomad_vault_agent_bin }} unwrap -field=token $(jq -r '.token' {{ nomad_vault_agent_token_path }})) \
+    {{ nomad_bin_dir }}/nomad agent -config={{ nomad_config_dir }} -vault-tls-skip-verify={{ nomad_vault_agent_skip_verify }}
+else
+  echo "Nomad service failed due to missing Vault token"
+  exit 1
+fi
+

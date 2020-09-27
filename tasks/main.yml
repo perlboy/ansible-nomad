@@ -137,6 +137,15 @@
     - not ansible_os_family == "Solaris"
   tags: skip_ansible_lint
 
+- name: nomad vault agent
+  template:
+    src: nomad_vault.sh.j2
+    dest: /usr/bin/nomad-vault.sh
+    owner: root
+    group: root
+    mode: 0755
+  when: nomad_vault_agent_support | bool
+
 - name: systemd script
   template:
     src: nomad_systemd.service.j2
